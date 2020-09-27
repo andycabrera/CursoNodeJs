@@ -3,16 +3,21 @@ var Bicicleta = require('../../models/bicicleta');
 var Usuario = require('../../models/usuario');
 var Reserva = require('../../models/reserva');
 
-describe('Testing Bicicletas', function(){
+describe('Testing Usuarios', function(){
     beforeAll(function(done){
-        var mongoDB = 'mongodb://localhost/testdb';
-        mongoose.connect(mongoDB,{ useNewUrlParser:true, useUnifiedTopology: true });
+        mongoose.connection.close().then(() => {
+            var mongoDB = 'mongodb://localhost/testdb';
+            mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
-        const db = mongoose.connection;
-        db.on('error',console.error.bind(console, 'connection error'));
-        db.once('open', function(){
-            console.log('We are connected to test database');
-            done();
+            var db = mongoose.connection;
+
+            db.on('error', console.error.bind(console, 'MongoDB connection error: '));
+            db.once('open', function () {
+
+                console.log('We are connected to test database!');
+                done();
+
+            });
         });
     });
 

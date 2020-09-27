@@ -12,8 +12,7 @@ describe('Bicicleta API', () => {
         mongoose.connection.close().then(() => {
             var mongoDB = 'mongodb://localhost/testdb';
             mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-
-            mongoose.set('useCreateIndex', true);
+            
             var db = mongoose.connection;
 
             db.on('error', console.error.bind(console, 'MongoDB connection error: '));
@@ -56,6 +55,8 @@ describe('Bicicleta API', () => {
                 expect(response.statusCode).toBe(200);
                 var result = JSON.parse(body);
                 expect(result.bicicleta.color).toBe('rojo');
+                expect(result.ubicacion[0]).toBe(-34);
+                expect(result.ubicacion[1]).toBe(-54);
                 done();
             });
         });
