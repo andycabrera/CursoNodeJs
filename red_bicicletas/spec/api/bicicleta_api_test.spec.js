@@ -55,8 +55,8 @@ describe('Bicicleta API', () => {
                 expect(response.statusCode).toBe(200);
                 var result = JSON.parse(body);
                 expect(result.bicicleta.color).toBe('rojo');
-                expect(result.ubicacion[0]).toBe(-34);
-                expect(result.ubicacion[1]).toBe(-54);
+                expect(result.bicicleta.ubicacion[0]).toBe(-34);
+                expect(result.bicicleta.ubicacion[1]).toBe(-54);
                 done();
             });
         });
