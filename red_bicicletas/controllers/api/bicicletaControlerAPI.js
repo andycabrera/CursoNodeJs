@@ -28,21 +28,8 @@ exports.bicicleta_delete = function(req, res){
     });
 }
 
-// exports.bicicleta_update = function(req, res){
-//     const bici = Bicicleta.findByCode(req.params.code,function(err, targetBici){
-//         if(err) console.log(err);
-//         bici.code = req.body.code;
-//         bici.color = req.body.color;
-//         bici.modelo = req.body.modelo;
-//         bici.ubicacion = [req.body.lat, req.body.lng];
-//         bici.save();
-//         res.status(200).json({
-//             bicicleta: bici
-//         })
-//     });
-
 exports.bicicleta_update = function(req, res){
-    Bicicleta.updateOne({code: req.body.codeUp},{ color: req.body.color}  ,function(err, targetBici){
+    Bicicleta.update(req.body ,function(err, targetBici){
         if(err) console.log(err);
         res.status(200).json({
             bicicleta: targetBici

@@ -81,19 +81,23 @@ describe('Bicicleta API', () => {
         });
     });
 
-    // describe('POST Bicicleta /update', () => {
-    //     it('Status 200', function (done) {
-    //         var bici = new Bicicleta({"code":10, "color":"rojo", "modelo":"urbana", "lat":-34, "lng":-54});
-    //         Bicicleta.add(bici, function(err, newBici){
-    //             request.post(base_url+'/10/update',{"code":10, "color":"rojo", "modelo":"urbana", "lat":-34, "lng":-54}
-    //                 , function (error, response, body) {
-    //                     Bicicleta.allBicis(function(err, bicis){
-    //                         expect(bicis.length).toBe(2);
-    //                         expect(response.statusCode).toBe(200);
-    //                         done();
-    //                     });
-    //                 });
-    //         });
-    //     });
-    // });
+    describe('UPDATE Bicicletas /update', () => {
+        it('Status 200', (done) => {
+            var headers = { 'content-type': 'application/json' };
+            var a = Bicicleta.createInstance(10, 'gris', 'urbana', [3.4693968, -76.4887123]);
+            Bicicleta.add(a, function (err, responseAdd) {
+                expect(responseAdd.code).toBe(10);
+
+                var biciModificar = `{"id": "${responseAdd._id}", "code": 10, "color": "blanco", "modelo": "carreras", "lat": 3.4693968, "lng": -76.4887123 }`;
+                request.put({
+                    headers: headers,
+                    url: `${base_url}/update`,
+                    body: biciModificar
+                }, function (err, responseUpd) {
+                    expect(responseUpd.statusCode).toBe(200);
+                    done();
+                });
+            });
+        });
+    });
 });
