@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  a.btn.btn-secundary(href='usuarios/create') Nueva Bicicleta
+
+  br
+  br    
+
+    table.table
+        thead
+          tr
+            th(scope ='col') #
+            th(scope ='col') Nombre
+            th(scope ='col') Email
+            th(scope ='col') Verificado
+            th(scope ='col')
+            th(scope ='col')
+        tbody
+          each usuario in usuarios
+            tr
+              th(scope = 'row') 
+                = usuario.id
+              td= usuario.nombre
+              td= usuario.email
+              td= usuario.verificado ? 'SI' : 'NO'
+              td
+                a(href='usuarios/' + usuario.id + '/update') Editar
+              td 
+                form.inline(method='post' action='usuario/' + usuario.id + '/delete')
+                  input(type='hidden' name='id' value= usuario.id)
+                  button.link-button.btn-danger(type='submit' name='submit_param' value='submit_value' class='btn')
+                    = 'Eliminar'

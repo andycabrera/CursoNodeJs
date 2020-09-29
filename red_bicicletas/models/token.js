@@ -3,12 +3,21 @@ var Usuario = require('usuario');
 var Schema = mongoose.Schema;
 
 var tokenSchema = new Schema({
-    id: Long,
-    usuario: {
+    _userId: {
         type: mongoose.Schema.Types.ObjectId, 
+        required: true,
         ref: 'Usuario'
     },
-    fecha: Date
+    token: {
+        type: String,
+        required: true
+    },
+    createdAt: { 
+        type: Date,
+        required: true,
+        default: Date.now,
+        expires: 43200 
+    }
 });
 
 
