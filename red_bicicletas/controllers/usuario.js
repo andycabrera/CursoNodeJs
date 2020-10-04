@@ -1,4 +1,4 @@
-var Usuario = require('usuario');
+var Usuario = require('../models/usuario');
 
 module.exports = {
     list: function(req, res){
@@ -18,27 +18,34 @@ module.exports = {
         Usuario.findByIdAndUpdate(req.params.id, update_values,function(err, usuario){
             if(err){
                 console.log(err);
-                res.render('usuarios/update', {errors: err.errors, usuario: new Usuario({nombre: req.body.nomrbe, email:req.body.email})});
+                res.render('usuarios/update', {errors: err.errors, usuario: new Usuario({nombre: req.body.nombre, email:req.body.email})});
             }else{
+                console.log('usuario editado');
                 res.redirect('/usuarios');
                 return;
             }
         });
     },
 
-    create_get: function(req, res){
-        res.render('/usuarios/create', {errors:{}, usuario: new Usuario()});
+    create_get: function(req, res, next){
+        res.render('usuarios/create', {errors:{}, usuario: new Usuario()});
     },
 
     create_post: function(req, res){
         if (req.body.password != req.body.confirm_password){
-            res.render('/usuarios/create', {errors:{confirm_password: {massage: 'No coinciden las contraseñas ingresadas'}}, usuario: new Usuario({nombre: req.body.nombre, email: req.body.email})});
+            res.render('usuarios/create', {errors: {confirm_password: {massage: 'No coinciden las contraseñas ingresadas'}}, usuario: new Usuario({nombre: req.body.nombre, email: req.body.email})});
             return;
         }
 
-        Usuario.create({nombre: req.body.nombre, email: req.body.email, password: req.body.email }, function(err, nuevoUsuario){
-            nuevoUsuario.enviar_email_bienvenida();
-            res.redirect('/usuarios');
+        Usuario.create({nombre: req.body.nombre, email: req.body.email, password: req.body.password }, function(err, nuevoUsuario){
+            if(err) {
+                console.log(err.message);
+                res.render('usuarios/create', {errors: err.errors, usuario: new Usuario({ nombre: req.body.nombre, email: req.body.email})});
+            }else{
+                nuevoUsuario.enviar_email_bienvenida();
+                res.redirect('/usuarios');
+            }
+
         });
     },
 

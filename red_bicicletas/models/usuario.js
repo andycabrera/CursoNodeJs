@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 var Reserva = require('./reserva');
 var Schema = mongoose.Schema;
+var Token = require('../models/token');
 
 const crypto =require('crypto');
 const mailer = require('../mailer/mailer');
@@ -44,7 +45,7 @@ var usuarioSchema = new Schema({
 usuarioSchema.plugin(uniqueValidator, {message : 'El {PATH} ya existe con otro usuario.'});
 
 usuarioSchema.pre('save', function(next){
-    if (this.password.isModified('password')){
+    if (this.isModified('password')){
         this.password = bcrypt.hashSync(this.password, saltRounds);
     }
     next();
@@ -60,7 +61,7 @@ usuarioSchema.methods.reservar = function(biciId, desde, hasta, cb){
 }
 
 usuarioSchema.methods.enviar_email_bienvenida = function(cb){
-    const token = new token({ _userId: this.id, token: crypto.randomBytes(16).toString('hex')});
+    const token = new Token({ _userId: this.id, token: crypto.randomBytes(16).toString('hex')});
     const email_destination = this.email;
     token.save(function(err){
         if(err){return console.log(err.message);}
@@ -69,7 +70,7 @@ usuarioSchema.methods.enviar_email_bienvenida = function(cb){
             from: 'no-reply@redbicicletas.com',
             to: email_destination,
             subject: 'Verificacion de cuenta',
-            text: 'Hola,\n\n' + 'Por favor, para verificar su cuenta haga click en este link: \n' + 'http://localhost:3000' + '\/token/confimation\/' + token.token + '.\n'
+            text: 'Hola,\n\n' + 'Por favor, para verificar su cuenta haga click en este link: \n' + 'http://localhost:3000' + '\/token/confirmation\/' + token.token + '.\n'
         };
 
         mailer.sendMail(mailOptions, function(err){

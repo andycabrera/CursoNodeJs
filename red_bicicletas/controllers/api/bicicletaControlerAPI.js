@@ -35,5 +35,4 @@ exports.bicicleta_update = function(req, res){
             bicicleta: targetBici
         });
     });
-
 }

@@ -35,7 +35,7 @@ describe('Testing Usuarios', function(){
     });
 
     describe('Cuando un Usuario reserva una bici', () => {
-        it('desde existir la reserva', (done) => {
+        it('debe existir la reserva', (done) => {
             const usuario = new Usuario({nombre: 'andy'});
             usuario.save();
 
