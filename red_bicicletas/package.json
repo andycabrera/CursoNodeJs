@@ -12,6 +12,7 @@
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "express-session": "^1.17.1",
     "http-errors": "~1.6.3",
@@ -24,7 +25,8 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pug": "2.0.0-beta11",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "vim": "^0.1.0"
   },
   "devDependencies": {
     "jasmine": "^3.6.1",

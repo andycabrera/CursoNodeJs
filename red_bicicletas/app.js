@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -39,7 +40,8 @@ const { token } = require('morgan');
 const { Recoverable } = require('repl');
 const { decode } = require('punycode');
 
-var mongoDB = 'mongodb://localhost/red_bicicletas';
+// var mongoDB = 'mongodb://localhost/red_bicicletas';
+var mongoDB = process.env.MONGO_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true ,useUnifiedTopology: true ,useFindAndModify: false});
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
