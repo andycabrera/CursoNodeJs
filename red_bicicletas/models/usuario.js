@@ -23,6 +23,7 @@ var usuarioSchema = new Schema({
         required: [true, 'El nombre es obligatorio']
     },
     googleId: String,
+    facebookId: String,
     email: {
         type: String, 
         trim: true,
@@ -123,7 +124,8 @@ usuarioSchema.statics.findOneOrCreateByGoogle = function findOneOrCreate (condit
             values.email = condition.emails[0].value;
             values.nombre = condition.displayName || 'SIN NOMBRE';
             values.verificado = true;
-            values.password = condition._json.etag;
+            // values.password = condition._json.etag;
+            values.password = crypto.randomBytes(16).toString('hex');
             console.log('------------------- VALUES -------------------');
             console.log(values);
             self.create(values, (err, result) => {
@@ -133,5 +135,36 @@ usuarioSchema.statics.findOneOrCreateByGoogle = function findOneOrCreate (condit
         }
     })  
 };
+
+userSchema.statics.findOneOrCreateByFacebook = function findOneOrCreate(condition, callback) {
+    const self = this;
+
+    this.findOne({
+        $or: [
+            { 'facebookId': condition.id },
+            { 'email': condition.emails[0].value }
+        ]
+    }, 
+    (err, result) => {
+        if (result) {
+            callback(err, result);
+        } else {
+            let values = {};
+
+            values.facebookId = condition.id;
+            values.email = condition.emails[0].value;
+            values.nombre = condition.displayName || '';
+            values.verified = true;
+            values.password = crypto.randomBytes(16).toString('hex');
+
+            self.create(values, function (err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                return callback(err, user);
+            });
+        }
+    });
+}
 
 module.exports = mongoose.model('Usuario', usuarioSchema);

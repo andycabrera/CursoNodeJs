@@ -162,7 +162,9 @@ app.use('./googleb3b57f3f1c60b53f.html', function(req, res){
 app.get('/auth/google',
     passport.authenticate('google', { scope: [
       'https://www.googleapis.com/auth/plus.login',
-      'https://www.googleapis.com/auth/plus.profile.emails.read'
+      'https://www.googleapis.com/auth/plus.profile.emails.read',
+      'profile',
+      'email',
     ]}));
 
 app.get('/auth/google/callback', passport.authenticate('google',{
