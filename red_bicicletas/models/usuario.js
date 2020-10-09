@@ -104,7 +104,7 @@ usuarioSchema.methods.resetPassword = function(cb){
     });
 }
 
-usuarioSchema.static.findOneOrCreateByGoogle = function findOneOrCreate (condition, callback){
+usuarioSchema.statics.findOneOrCreateByGoogle = function findOneOrCreate (condition, callback){
     const self = this;
     console.log(condition);
     self.findOne({
