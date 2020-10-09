@@ -22,6 +22,7 @@ var usuarioSchema = new Schema({
         trim: true,
         required: [true, 'El nombre es obligatorio']
     },
+    googleId: String,
     email: {
         type: String, 
         trim: true,
