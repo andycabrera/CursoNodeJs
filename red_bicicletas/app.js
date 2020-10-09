@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const passport = require('./config/passport');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
@@ -18,7 +19,19 @@ var authAPIRouter = require('./routes/api/auth');
 var bicicletasAPIRouter = require('./routes/api/bicicletas');
 var usuariosAPIRouter = require('./routes/api/usuarios');
 
-const store = new session.MemoryStore;
+let store;
+if(process.env.NODE_ENV === 'development'){
+  store = new session.MemoryStore;
+}else{
+  store = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    collection: 'sessions'
+  });
+  store.on('error', function(error){
+    assert.ifError(error);
+    assert.ok(false);
+  })
+}
 
 var app = express();
 
@@ -39,6 +52,7 @@ const Token = require('./models/token');
 const { token } = require('morgan');
 const { Recoverable } = require('repl');
 const { decode } = require('punycode');
+const { assert } = require('console');
 
 // var mongoDB = 'mongodb://localhost/red_bicicletas';
 var mongoDB = process.env.MONGO_URI;
@@ -145,6 +159,17 @@ app.use('./googleb3b57f3f1c60b53f.html', function(req, res){
   res.sendFile('public/googleb3b57f3f1c60b53f.html');
 });
 
+app.get('/auth/google',
+    passport.authenticate('google', { scope: [
+      'https://www.googleapis.com/auth/plus.login',
+      'https://www.googleapis.com/auth/plus.profile.emails.read'
+    ]}));
+
+app.get('/auth/google/callback', passport.authenticate('google',{
+    successRedirect: '/',
+    failureRedirect: '/error'
+  })
+);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
